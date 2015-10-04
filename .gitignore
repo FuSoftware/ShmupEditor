@@ -41,3 +41,10 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
+
+#############
+## Qt
+#############
+Qt-builds/
+Qt-builds/*
+src/Schmup_Editor.pro.user
