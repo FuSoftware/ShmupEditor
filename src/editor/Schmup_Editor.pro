@@ -12,11 +12,11 @@ TARGET = Schmup_Editor
 TEMPLATE = app
 
 ### TO ALLOW SFML LIBRARY ###
-INCLUDEPATH += $$PWD/lib/SFML-2.3-mingw32/include
-DEPENDPATH += $$PWD/lib/SFML-2.3-mingw32/include
+INCLUDEPATH += $$PWD/../lib/SFML-2.3-mingw32/include
+DEPENDPATH += $$PWD/../lib/SFML-2.3-mingw32/include
 
-CONFIG(release, debug|release): LIBS += -L$$PWD/lib/SFML-2.3-mingw32/lib -lsfml-audio -lsfml-graphics -lsfml-network -lsfml-window -lsfml-system
-CONFIG(debug, debug|release): LIBS += -L$$PWD/lib/SFML-2.3-mingw32/lib -lsfml-audio-d -lsfml-graphics-d -lsfml-network-d -lsfml-window-d -lsfml-system-d
+CONFIG(release, debug|release): LIBS += -L$$PWD/../lib/SFML-2.3-mingw32/lib -lsfml-audio -lsfml-graphics -lsfml-network -lsfml-window -lsfml-system
+CONFIG(debug, debug|release): LIBS += -L$$PWD/../lib/SFML-2.3-mingw32/lib -lsfml-audio-d -lsfml-graphics-d -lsfml-network-d -lsfml-window-d -lsfml-system-d
 
 ### FILES ###
 
