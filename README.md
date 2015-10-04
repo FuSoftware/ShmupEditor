@@ -17,9 +17,6 @@ For now, the project is in ean early stage, and will require some weeks/months b
   <li>Nearly everything editing-related</li>
 </ul>
 
-
-##Configuration
-
 ##Credits
 Laurent Gomila : http://www.sfml-dev.org/index-fr.php
 cdunn2001 : https://github.com/open-source-parsers/jsoncpp for making the JSON parser JsonCPP
