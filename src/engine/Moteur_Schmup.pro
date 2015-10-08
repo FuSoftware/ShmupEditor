@@ -38,7 +38,21 @@ HEADERS += constantes.h \
     Widgets/qenginewidget.h \
     Widgets/qsfmlcanvas.h \
     Objects/timedvector.h \
-    Entities/class_character_entity.h
+    Entities/class_character_entity.h \
+    json/assertions.h \
+    json/autolink.h \
+    json/config.h \
+    json/features.h \
+    json/forwards.h \
+    json/json.h \
+    json/json_batchallocator.h \
+    json/json_tool.h \
+    json/reader.h \
+    json/value.h \
+    json/version.h.in \
+    json/writer.h \
+    fonctions/fonctions.h \
+    fonctions/fonctions_json.h
 
 SOURCES += main.cpp \
     Entities/class_character_entity.cpp \
@@ -48,4 +62,15 @@ SOURCES += main.cpp \
     fonctions/fonctions_opengl.cpp \
     Widgets/qenginewidget.cpp \
     Widgets/qsfmlcanvas.cpp \
-    Objects/timedvector.cpp
+    Objects/timedvector.cpp \
+    json/json_internalarray.inl \
+    json/json_internalmap.inl \
+    json/json_reader.cpp \
+    json/json_value.cpp \
+    json/json_valueiterator.inl \
+    json/json_writer.cpp \
+    fonctions/fonctions.cpp \
+    fonctions/fonctions_json.cpp
+
+DISTFILES += \
+    json/sconscript
