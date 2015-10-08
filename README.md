@@ -15,6 +15,7 @@ For now, the project is in ean early stage, and will require some weeks/months b
 <ul>
   <li>Pattern designer</li>
   <li>Collisions in the Engine</li>
+  <li>Add ennemy patterns</li>
   <li>Nearly everything editing-related</li>
 </ul>
 
