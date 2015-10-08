@@ -41,7 +41,8 @@ void QSFMLCanvas::showEvent(QShowEvent*)
         #endif
 
         // On crée la fenêtre SFML avec l'identificateur du widget
-        renderWindow->create(reinterpret_cast<sf::WindowHandle>(winId()));
+        //renderWindow->create(reinterpret_cast<sf::WindowHandle>(winId()));
+        renderWindow->create((winId()));
 
         // On laisse la classe dérivée s'initialiser si besoin
         OnInit();

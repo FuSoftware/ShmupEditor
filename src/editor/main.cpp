@@ -6,13 +6,13 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    MainWindow w;
-    w.show();
+    //MainWindow w;
+    //w.show();
 
     //EnnemyEditor e;
     //e.show();
 
-    /*
+
     QFrame* MainFrame = new QFrame;
     MainFrame->setWindowTitle("Qt SFML");
     MainFrame->resize(400, 400);
@@ -20,7 +20,7 @@ int main(int argc, char *argv[])
 
     QPathCreator *pathCreator = new QPathCreator(MainFrame,QPoint(20,20),QSize(360,360));
     pathCreator->show();
-    */
+
 
 
     return a.exec();
