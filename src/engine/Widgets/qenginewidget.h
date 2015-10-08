@@ -14,7 +14,8 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 
-#include "fonctions/fonctions_conversion.h"
+#include "./fonctions/fonctions_conversion.h"
+#include "./fonctions/fonctions_opengl.h"
 
 class Entity;
 class Player;

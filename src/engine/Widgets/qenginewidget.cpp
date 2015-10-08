@@ -162,12 +162,13 @@ void QEngineWidget::drawBackground()
 {
     sf::Texture::bind(&background_picture);
 
-    glBegin(GL_QUADS);
+    draw_square(width,height,false);
+    /*glBegin(GL_QUADS);
         glTexCoord2d(0,0); glVertex2d(0,0); //Bas Gauche
         glTexCoord2d(0,1); glVertex2d(0,height); //Haut Gauche
         glTexCoord2d(1,1); glVertex2d(width,height);//Haut Droite
         glTexCoord2d(1,0); glVertex2d(width,0);//Bas Droite
-    glEnd();
+    glEnd();*/
 }
 
 int QEngineWidget::getWidth()
