@@ -26,7 +26,6 @@ int main(int argc, char *argv[])
 
     /*Création joueur*/
     Player *player = new Player(engine->getWidth()/2,0);
-    player->load_texture(std::string(TEXTURE_FOLDER)+std::string("perso_haut.png"));
     engine->addPlayer(player);
 
     return a.exec();
