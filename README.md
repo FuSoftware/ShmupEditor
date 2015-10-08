@@ -13,6 +13,8 @@ For now, the project is in ean early stage, and will require some weeks/months b
 
 ###Planned
 <ul>
+  <li>Pattern designer</li>
+  <li>Collisions in the Engine</li>
   <li>Nearly everything editing-related</li>
 </ul>
 
