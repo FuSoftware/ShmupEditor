@@ -3,16 +3,18 @@
 #include "class_bullet.h"
 
 
-Player::Player(int pos_x, int pos_y)
+Player::Player(int pos_x, int pos_y, std::string file)
 {
     abs_pos.x = pos_x;
     abs_pos.y = pos_y;
 
     input_buffer = 0;
 
-    setSize(PLAYER_WIDTH,PLAYER_HEIGHT);
+    loadFromJson(file);
 
     shoot_buffer = 0;
+
+    this->setHitboxDrawable(true);
 }
 
 Player::~Player()
@@ -29,16 +31,16 @@ void Player::move(Direction direction)
             switch(direction)
             {
             case HAUT:
-                abs_pos.y = abs_pos.y+MOVE_INCREMENT;
+                abs_pos.y = abs_pos.y+speed;
                 break;
             case BAS:
-                abs_pos.y = abs_pos.y-MOVE_INCREMENT;
+                abs_pos.y = abs_pos.y-speed;
                 break;
             case GAUCHE:
-                abs_pos.x = abs_pos.x-MOVE_INCREMENT;
+                abs_pos.x = abs_pos.x-speed;
                 break;
             case DROITE:
-                abs_pos.x = abs_pos.x+MOVE_INCREMENT;
+                abs_pos.x = abs_pos.x+speed;
                 break;
             }
         }
@@ -68,3 +70,33 @@ void Player::shoot()
     shoot_buffer++;
 }
 
+void Player::loadFromJson(std::string file)
+{
+    root = loadJSONFile(file.c_str());
+
+    setSpeed(root["speed"].asInt());
+    load_texture(root["sprite"].asString());
+
+    sf::Vector2<int> vec(root["size"][0].asInt(),root["size"][1].asInt());
+    setSize(vec);
+
+}
+
+void Player::setSpeed(int speed)
+{
+    this->speed = speed;
+}
+
+/*!
+{
+    "health" : 1,
+    "name" : "Sprite",
+    "spawn_time" : 0,
+    "sprite" : "F:/GitHub/SchmupEditor/data/sprites/sprite.png",
+    "size" : [
+    25,
+    25
+   ],
+   "speed" : 5
+}
+*/
