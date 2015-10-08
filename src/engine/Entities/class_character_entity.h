@@ -6,6 +6,7 @@
 #include <SFML/Graphics.hpp>
 
 #include "./Widgets/qenginewidget.h"
+#include "./fonctions/fonctions_opengl.h"
 
 class QEngineWidget;
 
@@ -22,6 +23,8 @@ public:
     void setSize(int w, int h);
     void setSize(sf::Vector2<int> size);
 
+    void setHitboxDrawable(bool ok);
+
 protected:
     sf::Vector2<float> abs_pos;
     sf::Vector2<int> size;
@@ -29,6 +32,8 @@ protected:
     sf::Texture texture;
 
     QEngineWidget *parent_window;
+
+    bool hitbox_drawable;
 };
 
 #endif // CLASS_CHARACTER_ENTITY

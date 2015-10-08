@@ -15,6 +15,8 @@ Bullet::Bullet(float orig_x, float orig_y, float dest_x, float dest_y, double sp
     setOrigin(v_orig);
     setDestination(v_dest);
     setSpeed(speed);
+
+    this->setHitboxDrawable(true);
 }
 
 Bullet::Bullet(sf::Vector2<float> origin, sf::Vector2<float> dest, double speed)

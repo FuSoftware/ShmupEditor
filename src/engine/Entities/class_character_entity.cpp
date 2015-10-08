@@ -2,7 +2,7 @@
 
 Entity::Entity()
 {
-
+    this->setHitboxDrawable(false);
 }
 
 Entity::~Entity()
@@ -16,12 +16,15 @@ void Entity::draw()
 
     glTranslated(abs_pos.x,abs_pos.y,0);
 
-    glBegin(GL_QUADS);
-        glTexCoord2d(0,0); glVertex2d(0,0); //Bas Gauche
-        glTexCoord2d(0,1); glVertex2d(0,size.y); //Haut Gauche
-        glTexCoord2d(1,1); glVertex2d(size.x,size.y);//Haut Droite
-        glTexCoord2d(1,0); glVertex2d(size.x,0);//Bas Droite
-    glEnd();
+    draw_square(size.x,size.y,true);
+
+    if(hitbox_drawable)
+    {
+        sf::Texture::bind(0);
+        glColor3ub(0,0,255);
+        draw_circle(0.2);
+        glColor3ub(255,255,255);
+    }
 
     glTranslated(-abs_pos.x,-abs_pos.y,0);
 }
@@ -50,4 +53,9 @@ void Entity::setSize(int w, int h)
 void Entity::setSize(sf::Vector2<int> size)
 {
     this->size = size;
+}
+
+void Entity::setHitboxDrawable(bool ok)
+{
+    this->hitbox_drawable = ok;
 }
