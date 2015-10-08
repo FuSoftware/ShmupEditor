@@ -13,7 +13,6 @@ For now, the project is in ean early stage, and will require some weeks/months b
 
 ###Planned
 <ul>
-  <li>Integrate the engine in this project</li>
   <li>Nearly everything editing-related</li>
 </ul>
 
