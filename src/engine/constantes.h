@@ -1,6 +1,8 @@
 #ifndef CONSTANTES
 #define CONSTANTES
 
+#define PI 3.14159265359
+
 #define DEBUG 1
 
 #define ENGINE_VER 0.1
@@ -8,19 +10,16 @@
 
 #define FPS 60
 
-#define PLAYER_WIDTH 27
-#define PLAYER_HEIGHT 28
+#define TEST_FILE_PLAYER "F:/GitHub/SchmupEditor/data/test/main_character.json"
 
 #define BULLET_WIDTH 10
 #define BULLET_HEIGHT 10
 
-#define MOVE_INCREMENT 5
 #define BULLET_SPEED_DIVIDER 25
 #define BULLET_SPEED 10
 
 /*Paths*/
-#define TEXTURE_FOLDER "F:/Qt/Moteur_Schmup/data/textures/"
-#define FONT_FOLDER "F:/Qt/Moteur_Schmup/data/font/"
+#define TEXTURE_FOLDER "F:/GitHub/SchmupEditor/data/sprites/"
 
 /*Array sizes*/
 #define MAX_PLAYER_NUMBER 16
