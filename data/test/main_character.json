@@ -1,0 +1,11 @@
+{
+	"health" : 1,
+	"name" : "Sprite",
+	"spawn_time" : 0,
+	"sprite" : "F:/GitHub/SchmupEditor/data/sprites/sprite.png",
+	"size" : [
+	25,
+	25
+   ],
+   "speed" : 5
+}
