@@ -9,6 +9,11 @@
 #include "class_character_entity.h"
 #include "math.h"
 
+enum Bullet_Type{
+    B_PLAYER = 0,
+    B_ENNEMY
+};
+
 class Bullet : public Entity
 {
 public:
@@ -33,6 +38,7 @@ private:
 
     double bullet_speed;
 
+    int bullet_type;
 };
 
 #endif // CLASS_BULLET

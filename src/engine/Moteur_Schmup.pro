@@ -15,9 +15,6 @@ TEMPLATE = app
 INCLUDEPATH += $$PWD/../lib/SFML-2.3-mingw32/include
 DEPENDPATH += $$PWD/../lib/SFML-2.3-mingw32/include
 
-CONFIG(release, debug|release): LIBS += -L$$PWD/../lib/SFML-2.3-mingw32/lib -lsfml-audio -lsfml-graphics -lsfml-network -lsfml-window -lsfml-system
-CONFIG(debug, debug|release): LIBS += -L$$PWD/../lib/SFML-2.3-mingw32/lib -lsfml-audio-d -lsfml-graphics-d -lsfml-network-d -lsfml-window-d -lsfml-system-d
-
 ### FILES ###
 
 #OpenGL Linux
@@ -26,13 +23,24 @@ CONFIG(debug, debug|release): LIBS += -L$$PWD/../lib/SFML-2.3-mingw32/lib -lsfml
 #LIBS += -L/lib -lGLU
 
 #OpenGL Windows
+win32:{
 LIBS += -lopengl32
 LIBS += -lglu32
+
+CONFIG(release, debug|release): LIBS += -L$$PWD/../lib/SFML-2.3-mingw32/lib/ -lsfml-audio -lsfml-graphics -lsfml-network -lsfml-window -lsfml-system
+CONFIG(debug, debug|release): LIBS += -L$$PWD/../lib/SFML-2.3-mingw32/lib/ -lsfml-audio-d -lsfml-graphics-d -lsfml-network-d -lsfml-window-d -lsfml-system-d
+}
+unix:{
+LIBS += -L/lib/ -lGL
+LIBS += -L/lib/ -lGLU
+LIBS += -L/lib/ -lsfml-audio -lsfml-graphics -lsfml-network -lsfml-window -lsfml-system
+}
+
+
 
 
 HEADERS += constantes.h \
     Entities/class_character_player.h \
-    Entities/class_bullet.h \
     fonctions/fonctions_conversion.h \
     fonctions/fonctions_opengl.h \
     Widgets/qenginewidget.h \
@@ -52,12 +60,14 @@ HEADERS += constantes.h \
     json/version.h.in \
     json/writer.h \
     fonctions/fonctions.h \
-    fonctions/fonctions_json.h
+    fonctions/fonctions_json.h \
+    Objects/collisionengine.h \
+    Entities/ennemybullet.h \
+    Entities/bullet.h
 
 SOURCES += main.cpp \
     Entities/class_character_entity.cpp \
     Entities/class_character_player.cpp \
-    Entities/class_bullet.cpp \
     fonctions/fonctions_conversion.cpp \
     fonctions/fonctions_opengl.cpp \
     Widgets/qenginewidget.cpp \
@@ -70,7 +80,10 @@ SOURCES += main.cpp \
     json/json_valueiterator.inl \
     json/json_writer.cpp \
     fonctions/fonctions.cpp \
-    fonctions/fonctions_json.cpp
+    fonctions/fonctions_json.cpp \
+    Objects/collisionengine.cpp \
+    Entities/ennemybullet.cpp \
+    Entities/bullet.cpp
 
 DISTFILES += \
     json/sconscript

@@ -47,6 +47,7 @@ public :
 
     void debugBullets();
 
+    void spawnEnnemies();
 private:
     int width;
     int height;

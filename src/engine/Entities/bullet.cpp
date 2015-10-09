@@ -1,4 +1,4 @@
-#include "class_bullet.h"
+#include "bullet.h"
 
 Bullet::Bullet(float orig_x, float orig_y, float dest_x, float dest_y, double speed)
 {

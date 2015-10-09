@@ -1,6 +1,6 @@
 #include "class_character_player.h"
 
-#include "class_bullet.h"
+#include "bullet.h"
 
 
 Player::Player(int pos_x, int pos_y, std::string file)

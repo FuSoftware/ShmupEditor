@@ -2,7 +2,7 @@
 
 #include "Entities/class_character_entity.h"
 #include "Entities/class_character_player.h"
-#include "Entities/class_bullet.h"
+#include "Entities/bullet.h"
 
 QEngineWidget::QEngineWidget(QWidget* Parent, const QPoint& Position, const QSize& Size) : QSFMLCanvas(Parent, Position, Size, (1000/FPS))
 {
@@ -163,12 +163,6 @@ void QEngineWidget::drawBackground()
     sf::Texture::bind(&background_picture);
 
     draw_square(width,height,false);
-    /*glBegin(GL_QUADS);
-        glTexCoord2d(0,0); glVertex2d(0,0); //Bas Gauche
-        glTexCoord2d(0,1); glVertex2d(0,height); //Haut Gauche
-        glTexCoord2d(1,1); glVertex2d(width,height);//Haut Droite
-        glTexCoord2d(1,0); glVertex2d(width,0);//Bas Droite
-    glEnd();*/
 }
 
 int QEngineWidget::getWidth()
@@ -184,5 +178,12 @@ int QEngineWidget::getHeight()
 void QEngineWidget::debugBullets()
 {
     std::cout << "Bullets alive : " << bullets.size() << std::endl;
+}
+
+void QEngineWidget::spawnEnnemies()
+{
+    //Compare current time to each ennemy's spawn time
+
+    //Spawns the ennemy
 }
 
