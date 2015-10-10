@@ -8,7 +8,7 @@ QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = Schmup_Editor
+TARGET = Shmup_Editor
 TEMPLATE = app
 
 ### TO ALLOW SFML LIBRARY ###
@@ -39,9 +39,12 @@ SOURCES += main.cpp\
     fonctions.cpp \
     fonctions_json.cpp \
     Widgets/ennemy_editor.cpp \
-    Widgets/qpathcreator.cpp \
     Widgets/qsfmlcanvas.cpp \
-    Objects/timedvector.cpp
+    Objects/timedvector.cpp \
+    Widgets/qpathcanvas.cpp \
+    Widgets/qpathcreator.cpp \
+    Widgets/qcoordwidget.cpp \
+    Widgets/qpathviewer.cpp
 
 HEADERS  += mainwindow.h \
     json/assertions.h \
@@ -60,9 +63,12 @@ HEADERS  += mainwindow.h \
     fonctions_json.h \
     constantes.h \
     Widgets/ennemy_editor.h \
-    Widgets/qpathcreator.h \
     Widgets/qsfmlcanvas.h \
-    Objects/timedvector.h
+    Objects/timedvector.h \
+    Widgets/qpathcanvas.h \
+    Widgets/qpathcreator.h \
+    Widgets/qcoordwidget.h \
+    Widgets/qpathviewer.h
 
 DISTFILES += \
     json/sconscript

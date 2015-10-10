@@ -1,136 +1,103 @@
 #include "qpathcreator.h"
 
-QPathCreator::QPathCreator(QWidget* Parent, const QPoint& Position, const QSize& Size) : QSFMLCanvas(Parent, Position, Size)
+QPathCreator::QPathCreator(QWidget *parent) : QWidget(parent)
 {
+    QVBoxLayout *layoutMain = new QVBoxLayout;
+    QHBoxLayout *layoutPath = new QHBoxLayout;
+    QHBoxLayout *layoutFooter = new QHBoxLayout;
+
+    scrollCoord = new QScrollArea(this);
+    widgetArea = new QWidget(scrollCoord);
+
+    pushButtonSave = new QPushButton("Save",this);
+
+    layoutCoordinates = new QVBoxLayout();
+
+    scrollCoord->setWidgetResizable(true);
+    scrollCoord->setWidget(widgetArea);
+    scrollCoord->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    scrollCoord->setSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding);
+
+    QVBoxLayout *layoutCoordinatesB = new QVBoxLayout;
+    layoutCoordinatesB->addLayout(layoutCoordinates);
+    layoutCoordinatesB->addStretch(1);
+
+    QSize canvasSize(480,640);
+
+    pathCanvas = new QPathCanvas(this,QPoint(0,0),canvasSize);
+    pathCanvas->setMinimumSize(canvasSize);
+
+    sliderTime = new QSlider(this);
+    sliderTime->setOrientation(Qt::Horizontal);
+
+    widgetArea->setLayout(layoutCoordinatesB);
+
+    layoutPath->addWidget(pathCanvas);
+    layoutPath->addWidget(scrollCoord);
+
+    layoutFooter->addWidget(sliderTime);
+    layoutFooter->addWidget(pushButtonSave);
+
+    layoutMain->addLayout(layoutPath);
+    layoutMain->addLayout(layoutFooter);
+
+    setLayout(layoutMain);
+
+    /*Test*/
+    /*
+    std::vector< TimedVector* > coordinates;
+    coordinates.push_back(new TimedVector(Vector2<float>(10.,10.),20));
+    coordinates.push_back(new TimedVector(Vector2<float>(200.,160.),320));
+    coordinates.push_back(new TimedVector(Vector2<float>(100.,300.),486));
+
+    generateCoordWidgets(coordinates);*/
+
+    connect(pathCanvas,SIGNAL(coordAdded(TimedVector*)),this,SLOT(addCoordWidget(TimedVector*)));
+    connect(pathCanvas,SIGNAL(coordDeleted(int)),this,SLOT(deleteCoordWidget(int)));
+    connect(pathCanvas,SIGNAL(coordEdited(int,TimedVector*)),this,SLOT(editCoordWidget(int,TimedVector*)));
+
+    connect(pushButtonSave,SIGNAL(clicked()),this,SLOT(save()));
+}
+
+void QPathCreator::addCoordWidget(TimedVector *coordinates)
+{
+    coordinateWidgets.push_back((new QCoordWidget(coordinateWidgets.size(),coordinates,this)));
+    layoutCoordinates->addWidget(coordinateWidgets.at(coordinateWidgets.size()-1));
+
+    scrollCoord->setMinimumWidth(coordinateWidgets.at(coordinateWidgets.size()-1)->width()*3);
 
 }
 
-QPathCreator::~QPathCreator()
+void QPathCreator::deleteCoordWidget(int index)
 {
+    delete coordinateWidgets.at(index);
 
-}
-
-void QPathCreator::OnInit()
-{
-    /*Intitialisation*/
-    coordinates.push_back(new TimedVector(Vector2<float>(10.,10.)));
-    coordinates.push_back(new TimedVector(Vector2<float>(200.,160.)));
-    coordinates.push_back(new TimedVector(Vector2<float>(100.,300.)));
-
-    point_time = 0;
-    cursor_in_field = false;
-}
-
-void QPathCreator::OnUpdate()
-{
-    /*Update*/
-    sf::Mouse mouse;
-
-    /*Events*/
-    sf::Event event;
-
-    // tant qu'il y a des évènements à traiter...
-    while (renderWindow->pollEvent(event))
+    for(int i=0;i<coordinateWidgets.size();i++)
     {
-        switch(event.type)
-        {
-        case sf::Event::MouseButtonPressed:
-            switch(event.mouseButton.button)
-            {
-            case sf::Mouse::Left:
-                coordinates.push_back(new TimedVector(mouse.getPosition(*renderWindow)));
-                break;
-            case sf::Mouse::Right:
-                if(coordinates.size() > 0){coordinates.pop_back();}
-                break;
-            default:
-                break;
-            }
-            break;
-        case sf::Event::MouseWheelScrolled:
-            switch(event.mouseWheelScroll.wheel)
-            {
-            case sf::Mouse::VerticalWheel:
-                std::cout << "wheel type: vertical" << std::endl;
-                break;
-            case sf::Mouse::HorizontalWheel:
-                std::cout << "wheel type: horizontal" << std::endl;
-                break;
-            default:
-                std::cout << "wheel type: unknow" << std::endl;
-                break;
-            }
-
-            std::cout << "wheel movement: " << event.mouseWheelScroll.delta << std::endl;
-            std::cout << "mouse x: " << event.mouseWheelScroll.x << std::endl;
-            std::cout << "mouse y: " << event.mouseWheelScroll.y << std::endl;
-        default:
-            break;
-        }
-    }
-
-    /*Checks if the cursor is in the window*/
-    if(mouse.getPosition(*renderWindow).x < renderWindow->getSize().x && mouse.getPosition(*renderWindow).x >= 0 && mouse.getPosition(*renderWindow).y < renderWindow->getSize().y && mouse.getPosition(*renderWindow).y >= 0)
-    {
-        cursor_in_field = true;
-    }
-    else
-    {
-        cursor_in_field = false;
-    }
-
-    /*Get mouse pos to show on screen*/
-    if(cursor_in_field)
-    {
-        coordinates.push_back(new TimedVector(mouse.getPosition(*renderWindow)));
-    }
-
-    /*Drawing*/
-    renderWindow->clear(); //Clears the screen
-    drawCoordinates();
-    drawLines();
-
-    /*Deletes the last coordinate (the mouse's one)*/
-    if(cursor_in_field)
-    {
-        coordinates.pop_back();
+        coordinateWidgets.at(i)->setIndex(i);
     }
 }
 
-void QPathCreator::drawLines()
+void QPathCreator::editCoordWidget(int index, TimedVector *coordinates)
 {
-    for(int i=1;i<coordinates.size();i++)
-    {
-        Vertex line[] =
-        {
-            Vertex(coordinates.at(i-1)->getVector()),
-            Vertex(coordinates.at(i)->getVector())
-        };
-
-        renderWindow->draw(line, 2, Lines);
-    }
+    coordinateWidgets.at(index)->changeData(index, coordinates);
 }
 
-void QPathCreator::drawCoordinates()
+void QPathCreator::save()
 {
-    /*Draw stored coordinates*/
+    /*Saves the paths as a .json file*/
+    std::vector< TimedVector* > coordinates = pathCanvas->getCoordinates();
+    Json::Value root;
+
+    QString file = QFileDialog::getSaveFileName(this, "Enregistrer un fichier", QString(), "JSON File (*.json)");
+
     for(int i=0;i<coordinates.size();i++)
     {
-        CircleShape shape(CIRCLE_D);
-
-        Vector2<float> pos = Vector2<float>(coordinates.at(i)->getX()-CIRCLE_D,coordinates.at(i)->getY()-CIRCLE_D);
-
-        shape.setPosition(pos);
-
-        // change la couleur de la forme pour du vert
-        shape.setFillColor(Color(100, 250, 50));
-
-        renderWindow->draw(shape);
+        /*The coords are changed from y to (1-y) due to the engine using inverted y coords*/
+        root[i]["x"] = coordinates.at(i)->getX(V_REL);
+        root[i]["y"] = 1.-coordinates.at(i)->getY(V_REL);
+        root[i]["t"] = coordinates.at(i)->getTime();
     }
-}
 
-void QPathCreator::addCoordinate(Vector2<float> vector)
-{
-    coordinates.push_back(new TimedVector(vector));
+    saveJSONFile(root,file.toStdString().c_str());
 }
-

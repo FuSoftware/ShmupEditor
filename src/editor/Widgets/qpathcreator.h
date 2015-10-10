@@ -1,40 +1,41 @@
 #ifndef QPATHCREATOR_H
 #define QPATHCREATOR_H
 
-#include <iostream>
-#include <vector>
+#include <QtWidgets>
 
-#include <SFML/Window.hpp>
+#include "qpathcanvas.h"
+#include "qcoordwidget.h"
 
-#include "./Objects/timedvector.h"
-#include "qsfmlcanvas.h"
+#include "./fonctions_json.h"
 
-#define CIRCLE_D 3
-
-using namespace sf;
-
-class QPathCreator : public QSFMLCanvas
+class QPathCreator : public QWidget
 {
     Q_OBJECT
-public :
-    QPathCreator(QWidget* Parent, const QPoint& Position, const QSize& Size);
-    ~QPathCreator();
-    void OnInit();
-    void OnUpdate();
+public:
+    QPathCreator(QWidget *parent = 0);
 
-    void drawLines();
-    void drawCoordinates();
-    void addCoordinate(Vector2<float> vector);
+signals:
 
-private :
-    sf::Sprite mySprite;
-    sf::Window *virtualWindow; //Used for mouse coordinates
+public slots:
+    void addCoordWidget(TimedVector *coordinates);
+    void deleteCoordWidget(int index);
+    void editCoordWidget(int index, TimedVector *coordinates);
 
-    std::vector< TimedVector* > coordinates;
+    void save();
 
-    int point_time;
-    bool cursor_in_field;
 
+private:
+    QPathCanvas* pathCanvas;
+    QVBoxLayout* layoutCoordinates;
+    std::vector<QCoordWidget*> coordinateWidgets;
+    QSlider *sliderTime;
+    QPushButton *pushButtonSave;
+
+    QScrollArea *scrollCoord;
+    QWidget *widgetArea;
+
+    QSpacerItem *spacer;
+    bool spacer_loaded;
 };
 
 #endif // QPATHCREATOR_H

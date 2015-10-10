@@ -19,6 +19,8 @@ QSFMLCanvas::QSFMLCanvas(QWidget* Parent, const QPoint& Position, const QSize& S
     move(Position);
     resize(Size);
 
+    setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
+
     // Préparation du timer
     myTimer.setInterval(FrameTime);
 
@@ -41,8 +43,13 @@ void QSFMLCanvas::showEvent(QShowEvent*)
         #endif
 
         // On crée la fenêtre SFML avec l'identificateur du widget
-        //renderWindow->create(reinterpret_cast<sf::WindowHandle>(winId()));
-        renderWindow->create((winId()));
+        #ifdef _WIN32
+            renderWindow->create(reinterpret_cast<sf::WindowHandle>(winId()));
+        #elif __linux
+            renderWindow->create((winId()));
+        #endif
+
+
 
         // On laisse la classe dérivée s'initialiser si besoin
         OnInit();

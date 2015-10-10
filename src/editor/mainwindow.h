@@ -6,7 +6,7 @@
 #include <QtWidgets>
 
 #include "Widgets/ennemy_editor.h"
-#include "Widgets/qpathcreator.h"
+#include "Widgets/qpathcanvas.h"
 
 class MainWindow : public QMainWindow
 {

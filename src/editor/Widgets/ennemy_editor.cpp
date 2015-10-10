@@ -3,15 +3,25 @@
 EnnemyEditor::EnnemyEditor(QWidget *parent) : QWidget(parent)
 {
     sprite_loaded = false;
+    path_loaded = false;
 
     layoutMain = new QHBoxLayout;
     layoutParam = new QVBoxLayout;
 
+    layoutLeft = new QVBoxLayout;
     labelSprite = new QLabel("No Sprite",this);
 
+    QSize widgetSize(128,128);
+    pathViewer = new QPathViewer(positions,this,QPoint(0,0),widgetSize);
+    pathViewer->setMinimumSize(widgetSize);
+
     layoutFile = new QHBoxLayout;
-    pushButtonOpenFile = new QPushButton("File",this);
+    pushButtonOpenFile = new QPushButton("Sprite",this);
     labelFilePath = new QLabel("Select a file",this);
+
+    layoutPath = new QHBoxLayout;
+    pushButtonLoadPath = new QPushButton("Path",this);
+    labelPathFilePath  = new QLabel("Select the path file",this);
 
     pushButtonSave = new QPushButton("Save",this);
 
@@ -23,6 +33,15 @@ EnnemyEditor::EnnemyEditor(QWidget *parent) : QWidget(parent)
     lineEditSpawnTime = new QLineEdit(this);
     labelHealth = new QLabel("Health Points :",this);
     lineEditHealth = new QLineEdit(this);
+    labelSize = new QLabel("Size :",this);
+
+    QHBoxLayout *layoutSize = new QHBoxLayout;
+
+    for(int i=0;i<2;i++)
+    {
+        lineEditSize[i] = new QLineEdit(this);
+        layoutSize->addWidget(lineEditSize[i]);
+    }
 
     gridLayoutParam->addWidget(labelName,0,0);
     gridLayoutParam->addWidget(lineEditName,0,1);
@@ -30,22 +49,34 @@ EnnemyEditor::EnnemyEditor(QWidget *parent) : QWidget(parent)
     gridLayoutParam->addWidget(lineEditSpawnTime,1,1);
     gridLayoutParam->addWidget(labelHealth,2,0);
     gridLayoutParam->addWidget(lineEditHealth,2,1);
+    gridLayoutParam->addWidget(labelSize,3,0);
+    gridLayoutParam->addLayout(layoutSize,3,1);
+
+    layoutLeft->addWidget(labelSprite);
+    layoutLeft->addWidget(pathViewer);
 
     layoutFile->addWidget(pushButtonOpenFile);
     layoutFile->addWidget(labelFilePath);
 
+    layoutPath->addWidget(pushButtonLoadPath);
+    layoutPath->addWidget(labelPathFilePath);
+
     layoutParam->addLayout(layoutFile);
+    layoutParam->addLayout(layoutPath);
     layoutParam->addLayout(gridLayoutParam);
     layoutParam->addStretch();
     layoutParam->addWidget(pushButtonSave);
 
-    layoutMain->addWidget(labelSprite);
+    layoutMain->addLayout(layoutLeft);
     layoutMain->addLayout(layoutParam);
 
     setLayout(layoutMain);
 
     connect(pushButtonOpenFile,SIGNAL(clicked()),this,SLOT(loadSprite()));
+    connect(pushButtonLoadPath,SIGNAL(clicked()),this,SLOT(loadPath()));
     connect(pushButtonSave,SIGNAL(clicked()),this,SLOT(save()));
+
+    resize(0,0);
 
 }
 
@@ -63,14 +94,55 @@ void EnnemyEditor::loadSprite()
 
     if(!pixmap.isNull())
     {
-        labelSprite->setPixmap(pixmap.scaled(256,256, Qt::KeepAspectRatio, Qt::SmoothTransformation));//Sets it to 256*256px max, with ratio
+        labelSprite->setPixmap(pixmap.scaled(128,128, Qt::KeepAspectRatio, Qt::SmoothTransformation));//Sets it to 128*128 max, with ratio
         labelFilePath->setText(file);//Shows the path on the widget
+        lineEditSize[0]->setText(QString::number(labelSprite->pixmap()->width()));
+        lineEditSize[1]->setText(QString::number(labelSprite->pixmap()->height()));
         sprite_loaded = true;
     }
     else
     {
         labelFilePath->setText("Failed to load sprite");
         sprite_loaded = false;
+    }
+}
+
+void EnnemyEditor::loadPath()
+{
+    positions.clear();
+
+    /*Loads a Path's file path*/
+    QString file = QFileDialog::getOpenFileName(this, "Open File", QString(), "JSON File (*.json)");
+
+    Json::Value root = loadJSONFile(file.toStdString().c_str());
+
+    sf::Vector2<float> vector;
+    sf::Vector2<float> parent_size;
+    parent_size.x = 128;
+    parent_size.y = 128;
+
+
+    int i = 0;
+
+    if(!root.isNull())
+    {
+        while(root[i].isObject())
+        {
+            vector.x = root[i]["x"].asFloat();
+            vector.y = 1-root[i]["y"].asFloat(); //Needs to invert the y coord due to the engine's (0,0) point being (0,max_h) here
+            positions.push_back(new TimedVector(vector,parent_size,root[i]["t"].asInt(),V_REL));
+
+            i=i+1;
+        }
+        path = root;
+        pathViewer->setPath(positions);
+
+        labelPathFilePath->setText(file);//Shows the path on the widget
+        path_loaded = true;
+    }
+    else
+    {
+        path_loaded = false;
     }
 }
 
@@ -83,8 +155,8 @@ void EnnemyEditor::save()
     bool isHealthNumeric = false;
     lineEditHealth->text().toInt(&isHealthNumeric);
 
-    std::cout << "SpawnTime : " << isSpawnTimeNumeric << std::endl;
-    std::cout << "Health    : " << isHealthNumeric << std::endl;
+    bool isSizeNumeric[2];
+    for(int i=0;i<2;i++){lineEditSize[i]->text().toInt(&isSizeNumeric[i]);}
 
     if(lineEditName->text().isEmpty())
     {
@@ -116,6 +188,21 @@ void EnnemyEditor::save()
         /*If the sprite isn't loaded*/
         QMessageBox::warning(this, "Incorrect Value", "Please load a sprite before saving.");
     }
+    else if(!path_loaded)
+    {
+        /*If the sprite isn't loaded*/
+        QMessageBox::warning(this, "Incorrect Value", "Please load a path before saving.");
+    }
+    else if(lineEditSize[0]->text().isEmpty() || lineEditSize[1]->text().isEmpty())
+    {
+        /*If Health is empty*/
+        QMessageBox::warning(this, "Incorrect Value", "Please fill the Size values.");
+    }
+    else if(!isSizeNumeric[0] || !isSizeNumeric[1])
+    {
+        /*If Health isn't numeric*/
+        QMessageBox::warning(this, "Incorrect Value", "Please check that the Sizes are integers.");
+    }
     else
     {
         /*Saves*/
@@ -128,6 +215,9 @@ void EnnemyEditor::save()
         root["spawn_time"] = lineEditSpawnTime->text().toInt();
         root["sprite"] = labelFilePath->text().toStdString();
         root["health"] = lineEditHealth->text().toInt();
+        root["path"] = path;
+        root["size"]["w"] = lineEditSize[0]->text().toInt();
+        root["size"]["h"] = lineEditSize[1]->text().toInt();
 
         saveJSONFile(root,file_path.toStdString().c_str());
     }

@@ -20,7 +20,7 @@ MainWindow::MainWindow(QWidget *parent)
     //MainFrame->resize(400, 400);
     //MainFrame->show();
 
-    QPathCreator *pathCreator = new QPathCreator(MainFrame,QPoint(20,20),QSize(360,360));
+    QPathCanvas *pathCreator = new QPathCanvas(MainFrame,QPoint(20,20),QSize(360,360));
 
     QMdiSubWindow *subWindowEnnemyEdit = centralArea->addSubWindow(ennemyEdit);
     QMdiSubWindow *subWindowPathCreator = centralArea->addSubWindow(pathCreator);

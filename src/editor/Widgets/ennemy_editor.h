@@ -6,6 +6,8 @@
 #include "./fonctions.h"
 #include "./fonctions_json.h"
 
+#include "qpathviewer.h"
+
 #include "./Objects/timedvector.h"
 
 class EnnemyEditor : public QWidget
@@ -19,9 +21,11 @@ signals:
 
 public slots:
     void loadSprite();
+    void loadPath();
     void save();
 
 private:
+    Json::Value path;
     std::vector<TimedVector*> positions;
     QString sprite_path;
     QString name;
@@ -29,10 +33,13 @@ private:
     int spawn_time;
     int health;
     bool sprite_loaded;
+    bool path_loaded;
 
     QHBoxLayout *layoutMain;
 
+    QVBoxLayout *layoutLeft;
     QLabel *labelSprite;
+    QPathViewer *pathViewer;
 
     QVBoxLayout *layoutParam;
 
@@ -43,13 +50,18 @@ private:
     QLineEdit *lineEditSpawnTime;
     QLabel *labelHealth;
     QLineEdit *lineEditHealth;
-
+    QLabel *labelSize;
+    QLineEdit *lineEditSize[2];
 
     QPushButton *pushButtonSave;
 
     QHBoxLayout *layoutFile;
     QPushButton *pushButtonOpenFile;
     QLabel *labelFilePath;
+
+    QHBoxLayout *layoutPath;
+    QPushButton *pushButtonLoadPath;
+    QLabel *labelPathFilePath;
 
 
 };
