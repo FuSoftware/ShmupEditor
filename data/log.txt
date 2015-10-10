@@ -1,0 +1,123 @@
+Loading Engine
+Loading Player
+Loading Ennemies
+Loading JSON File F:/GitHub/SchmupEditor/data/7up.json
+F:/GitHub/SchmupEditor/data/7up.json loaded
+
+Loading Engine
+Loading Player
+Loading Ennemies
+Loading JSON File F:/GitHub/SchmupEditor/data/7up.json
+7up spawned at 0,0
+Spawned bullet
+Spawned bullet
+Spawned bullet
+
+Loading Engine
+Loading Player
+Loading Ennemies
+Loading JSON File F:/GitHub/SchmupEditor/data/7up.json
+
+Loading Engine
+Loading Player
+Loading Ennemies
+Loading JSON File F:/GitHub/SchmupEditor/data/7up.json
+
+Loading Engine
+Loading Player
+Loading Ennemies
+Loading JSON File F:/GitHub/SchmupEditor/data/7up.json
+
+Loading Engine
+Loading Player
+Loading Ennemies
+Loading JSON File F:/GitHub/SchmupEditor/data/7up.json
+
+Loading Engine
+Loading Player
+Loading Ennemies
+Loading JSON File F:/GitHub/SchmupEditor/data/7up.json
+
+Loading Engine
+Loading Player
+Loading Ennemies
+Loading JSON File F:/GitHub/SchmupEditor/data/7up.json
+7up spawned at 152,5.25
+
+Loading Engine
+Loading Player
+Loading Ennemies
+Loading JSON File F:/GitHub/SchmupEditor/data/7up.json
+7up spawned at 152,5.25
+
+Loading Engine
+Loading Player
+Loading Ennemies
+Loading JSON File F:/GitHub/SchmupEditor/data/7up.json
+7up spawned at 152,5.25
+Destroying 7up
+
+Loading Engine
+Loading Player
+Loading Ennemies
+Loading JSON File F:/GitHub/SchmupEditor/data/7up.json
+JSON ERROR : * Line 7, Column 4
+  Missing '}' or object member name
+
+Could not loadDestroying 
+
+Loading Engine
+Loading Player
+Loading Ennemies
+Loading JSON File F:/GitHub/SchmupEditor/data/7up.json
+7up spawned at 152,5.25
+
+Loading Engine
+Loading Player
+Loading Ennemies
+Loading JSON File F:/GitHub/SchmupEditor/data/7up.json
+7up spawned at 152,5.25
+Destroying 7up
+
+Loading Engine
+Loading Player
+Loading Ennemies
+Loading JSON File F:/GitHub/SchmupEditor/data/7up.json
+
+Loading Engine
+Loading Player
+Loading Ennemies
+Loading JSON File F:/GitHub/SchmupEditor/data/7up.json
+7up spawned at 226.417,559.125
+
+Loading Engine
+Loading Player
+Loading Ennemies
+Loading JSON File F:/GitHub/SchmupEditor/data/7up.json
+7up spawned at 226.417,559.125
+Bullets alive : 0
+Bullets alive : 0
+Bullets alive : 0
+
+Loading Engine
+Loading Player
+Loading Ennemies
+Loading JSON File F:/GitHub/SchmupEditor/data/7up.json
+7up spawned at 226.417,559.125
+Destroying 7up
+
+Loading Test 1 - Player + Ennemy
+Loading Engine
+Loading Player
+Loading Ennemies
+Loading JSON File F:/GitHub/SchmupEditor/data/7up.json
+7up spawned at 226.417,559.125
+Destroying 7up
+
+Loading Test 1 - Player + Ennemy
+Loading Engine
+Loading Player
+Loading Ennemies
+Loading JSON File F:/GitHub/SchmupEditor/data/7up.json
+7up spawned at 238.333,599.062
+Destroying 7up
