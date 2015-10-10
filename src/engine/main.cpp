@@ -1,32 +1,23 @@
 #include <QApplication>
 
-#include <QFrame>
-#include "Entities/class_character_player.h"
+#include <cstdio>
+#include <cstdlib>
 
-#include "Widgets/qenginewidget.h"
+#include "tests.h"
 
-#define BORDER 20
-
-#define WIN_W 800
-#define WIN_H 600
+#define LOG_FILE "F:/GitHub/SchmupEditor/data/log.txt"
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
-    /*Création fenêtre*/
-    QFrame* MainFrame = new QFrame;
-    MainFrame->setWindowTitle("Engine Widget");
-    MainFrame->resize(WIN_W, WIN_H);
-    MainFrame->show();
+    /*Log File*/
+    std::freopen(LOG_FILE, "a", stdout);
+    std::clog << std::endl;
+    std::cout << std::endl;
 
-    QEngineWidget *engine = new QEngineWidget(MainFrame,QPoint(BORDER,BORDER),QSize(WIN_W-2*BORDER,WIN_H-2*BORDER));
-    engine->load_background(std::string(TEXTURE_FOLDER) + std::string("background.jpg"));
-    engine->show();
 
-    /*Création joueur*/
-    Player *player = new Player(engine->getWidth()/2,0);
-    engine->addPlayer(player);
+    test_player_ennemy();
 
     return a.exec();
 }

@@ -19,6 +19,7 @@
 
 class Entity;
 class Player;
+class Ennemy;
 class Bullet;
 
 using namespace sf;
@@ -34,8 +35,7 @@ public :
 
     void load_background(std::string path);
     void addPlayer(Player *player);
-    void addEnnemy(Entity *ennemy);
-
+    void addEnnemy(Ennemy *ennemy);
     void addBullet(Bullet *bullet);
 
     void draw();
@@ -56,13 +56,14 @@ private:
 
     sf::Text text;
     sf::Event evenements;
+    sf::Clock clock;
 
     sf::Texture background_picture;
 
     std::vector<Player*>players;
     int player_max_index;
 
-    std::vector<Entity*> ennemies;
+    std::vector<Ennemy*> ennemies;
     int ennemy_max_index;
 
     std::vector<Bullet*> bullets;

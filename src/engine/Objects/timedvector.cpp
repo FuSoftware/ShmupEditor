@@ -2,65 +2,58 @@
 
 TimedVector::TimedVector()
 {
-    TimedVector(sf::Vector2<float>(0,0), 0);
+    TimedVector(sf::Vector2<float>(0,0),sf::Vector2<float>(0,0), 0);
 }
 
-TimedVector::TimedVector(sf::Vector2<int> vector)
+TimedVector::TimedVector(sf::Vector2<float> vector, sf::Vector2<float> parent, VectorType type)
 {
-    sf::Vector2<float> floatVector = sf::Vector2<float>((float)vector.x,(float)vector.y);
-    setVector(floatVector);
+    setParent(parent);
+    setVector(vector,type);
     setTime(0);
 }
 
-TimedVector::TimedVector(sf::Vector2<int> vector, int time)
+TimedVector::TimedVector(sf::Vector2<float> vector, sf::Vector2<float> parent, int time, VectorType type)
 {
-    sf::Vector2<float> floatVector = sf::Vector2<float>((float)vector.x,(float)vector.y);
-    setVector(floatVector);
+    setParent(parent);
+    setVector(vector,type);
     setTime(time);
 }
 
-TimedVector::TimedVector(sf::Vector2<float> vector)
+void TimedVector::setVector(sf::Vector2<float> vector, VectorType type)
 {
-    setVector(vector);
-    setTime(0);
+    if(type == V_REL)
+    {
+        this->vector_rel = vector;
+        generateAbs();
+    }
+    else
+    {
+        this->vector_abs = vector;
+        generateRel();
+    }
 }
 
-TimedVector::TimedVector(sf::Vector2<float> vector, int time)
+void TimedVector::setParent(sf::Vector2<float> parent)
 {
-    setVector(vector);
-    setTime(time);
+    this->parent_size = parent;
 }
 
-TimedVector::TimedVector(int x, int y)
+void TimedVector::generateAbs()
 {
-    TimedVector(x,y,0);
+    this->vector_abs.x = this->vector_rel.x * this->parent_size.x;
+    this->vector_abs.y = this->vector_rel.y * this->parent_size.y;
 }
 
-TimedVector::TimedVector(int x, int y, int time)
+void TimedVector::generateRel()
 {
-    sf::Vector2<int> buffer = sf::Vector2<int>(x,y);
-    TimedVector(buffer,time);
-}
-
-TimedVector::TimedVector(float x, float y)
-{
-    TimedVector(x,y,0);
-}
-
-TimedVector::TimedVector(float x, float y, int time)
-{
-    sf::Vector2<float> buffer = sf::Vector2<float>(x,y);
-    TimedVector(buffer,time);
-}
-
-void TimedVector::setVector(sf::Vector2<float> vector)
-{
-    this->vector = vector;
+    this->vector_rel.x = this->vector_abs.x / this->parent_size.x;
+    this->vector_rel.y = this->vector_abs.y / this->parent_size.y;
 }
 
 void TimedVector::setVectorCoord(float x, float y)
 {
-    this->vector = sf::Vector2<float>(x,y);
+    this->vector_abs = sf::Vector2<float>(x,y);
+    generateRel();
 }
 
 void TimedVector::setTime(int time)
@@ -68,9 +61,10 @@ void TimedVector::setTime(int time)
     this->time = time;
 }
 
-sf::Vector2<float> TimedVector::getVector()
+sf::Vector2<float> TimedVector::getVector(VectorType type)
 {
-    return this->vector;
+    if(type == V_REL){return this->vector_rel;}
+    else{return this->vector_abs;}
 }
 
 int TimedVector::getTime()
@@ -78,12 +72,33 @@ int TimedVector::getTime()
     return this->time;
 }
 
-float TimedVector::getX()
+float TimedVector::getX(VectorType type)
 {
-    return this->vector.x;
+    if(type == V_REL){return this->vector_rel.x;}
+    else{return this->vector_abs.x;}
 }
 
-float TimedVector::getY()
+float TimedVector::getY(VectorType type)
 {
-    return this->vector.y;
+    if(type == V_REL){return this->vector_rel.y;}
+    else{return this->vector_abs.y;}
+}
+
+float TimedVector::getCoord(int i, VectorType type)
+{
+    switch(i)
+    {
+    case 0:
+        return getX(type);
+        break;
+    case 1:
+        return getY(type);
+        break;
+    case 2:
+        return (float)this->time;
+        break;
+    default:
+        return 0;
+        break;
+    }
 }

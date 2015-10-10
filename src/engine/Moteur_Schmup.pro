@@ -4,7 +4,8 @@
 #
 #-------------------------------------------------
 
-QT       += core gui widgets
+QT       += core gui
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 QMAKE_CXXFLAGS += -std=c++11
 
@@ -40,13 +41,11 @@ LIBS += -L/lib/ -lsfml-audio -lsfml-graphics -lsfml-network -lsfml-window -lsfml
 
 
 HEADERS += constantes.h \
-    Entities/class_character_player.h \
     fonctions/fonctions_conversion.h \
     fonctions/fonctions_opengl.h \
     Widgets/qenginewidget.h \
     Widgets/qsfmlcanvas.h \
     Objects/timedvector.h \
-    Entities/class_character_entity.h \
     json/assertions.h \
     json/autolink.h \
     json/config.h \
@@ -63,11 +62,13 @@ HEADERS += constantes.h \
     fonctions/fonctions_json.h \
     Objects/collisionengine.h \
     Entities/ennemybullet.h \
-    Entities/bullet.h
+    Entities/bullet.h \
+    Entities/player.h \
+    Entities/entity.h \
+    Entities/ennemy.h \
+    tests.h
 
 SOURCES += main.cpp \
-    Entities/class_character_entity.cpp \
-    Entities/class_character_player.cpp \
     fonctions/fonctions_conversion.cpp \
     fonctions/fonctions_opengl.cpp \
     Widgets/qenginewidget.cpp \
@@ -83,7 +84,11 @@ SOURCES += main.cpp \
     fonctions/fonctions_json.cpp \
     Objects/collisionengine.cpp \
     Entities/ennemybullet.cpp \
-    Entities/bullet.cpp
+    Entities/bullet.cpp \
+    Entities/player.cpp \
+    Entities/entity.cpp \
+    Entities/ennemy.cpp \
+    tests.cpp
 
 DISTFILES += \
     json/sconscript

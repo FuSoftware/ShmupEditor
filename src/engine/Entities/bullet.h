@@ -6,7 +6,7 @@
 #include <SFML/Graphics.hpp>
 
 #include "constantes.h"
-#include "class_character_entity.h"
+#include "entity.h"
 #include "math.h"
 
 enum Bullet_Type{

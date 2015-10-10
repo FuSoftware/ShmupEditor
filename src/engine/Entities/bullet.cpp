@@ -25,8 +25,6 @@ Bullet::Bullet(sf::Vector2<float> origin, sf::Vector2<float> dest, double speed)
     setOrigin(origin);
     setDestination(dest);
     setSpeed(speed);
-
-    std::cout << "Spawned bullet" << std::endl;
 }
 
 Bullet::~Bullet()

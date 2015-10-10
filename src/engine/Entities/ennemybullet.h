@@ -10,10 +10,6 @@ public:
     EnnemyBullet(sf::Vector2<float> origin, sf::Vector2<float> dest, double speed);
     ~EnnemyBullet();
 
-signals:
-
-public slots:
-
 private:
 };
 

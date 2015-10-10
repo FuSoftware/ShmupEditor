@@ -1,8 +1,10 @@
 #include "qenginewidget.h"
 
-#include "Entities/class_character_entity.h"
-#include "Entities/class_character_player.h"
+#include "Entities/entity.h"
+#include "Entities/player.h"
+#include "Entities/ennemy.h"
 #include "Entities/bullet.h"
+#include "Entities/ennemybullet.h"
 
 QEngineWidget::QEngineWidget(QWidget* Parent, const QPoint& Position, const QSize& Size) : QSFMLCanvas(Parent, Position, Size, (1000/FPS))
 {
@@ -32,11 +34,12 @@ void QEngineWidget::OnInit()
     glMatrixMode( GL_PROJECTION );
     glLoadIdentity( );
 
-    qDebug() << "Setting coordinates " << this->width << "," << this->height;
-
     gluOrtho2D(0, this->width, 0, this->height);
     glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_BLEND);
+
+    /*Reset du timer*/
+    clock.restart();
 }
 
 void QEngineWidget::OnUpdate()
@@ -77,7 +80,7 @@ void QEngineWidget::addPlayer(Player *player)
 }
 
 
-void QEngineWidget::addEnnemy(Entity *ennemy)
+void QEngineWidget::addEnnemy(Ennemy *ennemy)
 {
     ennemy->setParent(this);
     ennemies.push_back(ennemy);
@@ -100,9 +103,11 @@ void QEngineWidget::draw()
     /*Background*/
     drawBackground();
 
+    /*Spawn ennemies*/
+    spawnEnnemies();
+
 
     /*Players*/
-
     for(i=0;i<players.size();i++)
     {
         //Draws the players
@@ -110,15 +115,12 @@ void QEngineWidget::draw()
     }
 
     /*Ennemies*/
-    /*
-    if(ennemy_max_index > 0)
+    for(i=0;i<ennemies.size();i++)
     {
-        for(int i=0;i<ennemy_max_index;i++)
-        {
-            ennemies[i]->draw();
-        }
+        //Draws the players
+        ennemies.at(i)->move();
+        ennemies.at(i)->draw();
     }
-    */
 
     /*Bullets*/
     for(i=0;i<bullets.size();i++)
@@ -139,7 +141,6 @@ void QEngineWidget::draw()
                 bullets.at(j) = bullets.at(j+1); // Ensures no blank space is left in the bullet vector
             }
             bullets.pop_back();
-            std::cout << "Deleted bullet " << i << std::endl;
         }
     }
 }
@@ -183,7 +184,15 @@ void QEngineWidget::debugBullets()
 void QEngineWidget::spawnEnnemies()
 {
     //Compare current time to each ennemy's spawn time
-
-    //Spawns the ennemy
+    for(int i=0;i<ennemies.size();i++)
+    {
+        if(!ennemies.at(i)->hasSpawned())
+        {
+            if(clock.getElapsedTime().asMilliseconds() > ennemies.at(i)->getSpawnTime())
+            {
+                ennemies.at(i)->spawn(); //Spawns the ennemy
+            }
+        }
+    }
 }
 
