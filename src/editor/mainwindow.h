@@ -21,6 +21,7 @@ public:
     void createDockWindows();
     void createCentralArea();
     void loadProject();
+    void addFile(int sender);
 
 private:
     std::vector<QMdiSubWindow*> window_list;

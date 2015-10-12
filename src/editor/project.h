@@ -6,6 +6,20 @@
 #include <QtWidgets>
 
 #include "fonctions_json.h"
+#include "fonctions.h"
+
+enum FileType
+{
+    F_ENNEMY = 0,
+    F_LEVEL,
+    F_MUSIC,
+    F_PATH,
+    F_PATTERN,
+    F_PLAYER,
+    F_SPRITE,
+    F_LIST_END
+};
+const std::string FileTypeString[F_LIST_END] = {"Ennemy","Level","Music","Path","Pattern","Player","Sprite"};
 
 class Project : public QObject
 {
@@ -16,6 +30,9 @@ public:
 
     void loadConfig(Json::Value root);
     void loadFiles(Json::Value files_root);
+    void save();
+
+    void addFile(std::string path, int type);
 
     QDir getDir();
 
@@ -31,6 +48,7 @@ private:
     /*Project configuration*/
     std::vector<std::string> ennemy_files;
     std::vector<std::string> level_files;
+    std::vector<std::string> music_files;
     std::vector<std::string> path_files;
     std::vector<std::string> pattern_files;
     std::vector<std::string> player_files;

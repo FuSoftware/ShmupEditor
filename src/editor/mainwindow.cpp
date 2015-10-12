@@ -46,7 +46,22 @@ void MainWindow::createCentralArea()
     setCentralWidget(centralArea);
 }
 
+    QMenu *menuLoadFile = menuFichier->addMenu("Add File");
+    std::vector<QAction*> actions;
+    for(int i=0;i<F_LIST_END;i++)
+    {
+        actions.push_back(new QAction(FileTypeString[i].c_str(),this));
+        menuLoadFile->addAction(actions.at(i));
+        loadFileMapper->setMapping(actions.at(i),i);
+        connect( actions.at(i), SIGNAL(triggered()), loadFileMapper, SLOT(map()) );
+    }
+    menuLoadFile->setEnabled(false);
 void MainWindow::loadProject()
 {
 
+void MainWindow::addFile(int sender)
+{
+    QString path = QFileDialog::getOpenFileName(this,"Open " + QString(FileTypeString[sender].c_str()) + " File",QString(),"JSON File (*.json)");
+    project->addFile(path.toStdString(),sender);
+    refreshProjectTree();
 }
