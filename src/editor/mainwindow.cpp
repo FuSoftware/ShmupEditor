@@ -3,11 +3,9 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
-
-    /* Menus*/
-    QMenu *menuFichier = menuBar()->addMenu("&Fichier");
-    QMenu *menuEdition = menuBar()->addMenu("&Edition");
-    QMenu *menuAffichage = menuBar()->addMenu("&Affichage");
+    createActions();
+    createDockWindows();
+    createCentralArea();
 }
 
 MainWindow::~MainWindow()
@@ -20,10 +18,15 @@ void MainWindow::createDockWindows()
     QDockWidget *dock = new QDockWidget(tr("Project Tree"), this);
     dock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
 
-    QDirModel *modele = new QDirModel();
-    QTreeView *vue = new QTreeView;
-    vue->setModel(modele);
-    vue->setRootIndex(modele->index(this->project->getDir().absolutePath()));
+    projectModel = new QFileSystemModel ;
+    projectModel->setFilter(QDir::AllDirs | QDir::NoDotAndDotDot | QDir::Files);
+
+    projectView = new QTreeView;
+    projectView->setModel(projectModel);
+
+    dock->setWidget(projectView);
+
+    addDockWidget(Qt::LeftDockWidgetArea, dock);
 }
 
 void MainWindow::createCentralArea()
@@ -46,6 +49,16 @@ void MainWindow::createCentralArea()
     setCentralWidget(centralArea);
 }
 
+void MainWindow::createActions()
+{
+    QSignalMapper *loadFileMapper = new QSignalMapper( this );
+
+    /*File*/
+    QMenu *menuFichier = menuBar()->addMenu("&File");
+
+    QAction *actionLoadProject = new QAction("&Open Project", this);
+    menuFichier->addAction(actionLoadProject);
+
     QMenu *menuLoadFile = menuFichier->addMenu("Add File");
     std::vector<QAction*> actions;
     for(int i=0;i<F_LIST_END;i++)
@@ -56,8 +69,34 @@ void MainWindow::createCentralArea()
         connect( actions.at(i), SIGNAL(triggered()), loadFileMapper, SLOT(map()) );
     }
     menuLoadFile->setEnabled(false);
+
+    QAction *actionQuit = new QAction("&Quit", this);
+    menuFichier->addAction(actionQuit);
+
+    QMenu *menuEdition = menuBar()->addMenu("&Edit");
+
+    QMenu *menuAffichage = menuBar()->addMenu("&View");
+
+    /*Connects*/
+    connect(actionQuit,SIGNAL(triggered(bool)),qApp,SLOT(quit()));
+    connect(actionLoadProject,SIGNAL(triggered(bool)),this,SLOT(loadProject()));
+    connect(loadFileMapper,SIGNAL(mapped(int)),this,SLOT(addFile(int)));
+    connect(this,SIGNAL(projectLoaded(bool)),menuLoadFile,SLOT(setEnabled(bool)));
+}
+
+void MainWindow::refreshProjectTree()
+{
+    projectModel->setRootPath(project->getDir().absolutePath());
+    projectView->setRootIndex(projectModel->index(project->getDir().absolutePath()));
+}
+
 void MainWindow::loadProject()
 {
+    QString path = QFileDialog::getOpenFileName(this,"Open Project File",QString(),"ShmuProject File (*.shp)");
+    project = new Project(path.toStdString(),this);
+    refreshProjectTree();
+    emit projectLoaded(true);
+}
 
 void MainWindow::addFile(int sender)
 {

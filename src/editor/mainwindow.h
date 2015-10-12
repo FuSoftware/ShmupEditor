@@ -20,13 +20,24 @@ public:
 
     void createDockWindows();
     void createCentralArea();
+    void createActions();
+    void refreshProjectTree();
+
+
+public slots:
     void loadProject();
     void addFile(int sender);
+
+signals:
+    void projectLoaded(bool);
 
 private:
     std::vector<QMdiSubWindow*> window_list;
 
     QDir *projectRoot;
+
+    QFileSystemModel *projectModel;
+    QTreeView *projectView;
 
     Project *project;
 
