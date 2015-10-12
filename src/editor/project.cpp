@@ -72,3 +72,8 @@ void Project::loadFiles(Json::Value files_root)
         sprite_files.push_back(files_root["sprites"][i].asString());
     }
 }
+
+QDir Project::getDir()
+{
+            return this->rootFolder;
+}

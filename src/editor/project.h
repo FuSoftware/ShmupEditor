@@ -17,6 +17,8 @@ public:
     void loadConfig(Json::Value root);
     void loadFiles(Json::Value files_root);
 
+    QDir getDir();
+
 signals:
 
 public slots:

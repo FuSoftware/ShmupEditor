@@ -23,7 +23,7 @@ void MainWindow::createDockWindows()
     QDirModel *modele = new QDirModel();
     QTreeView *vue = new QTreeView;
     vue->setModel(modele);
-    //vue->setRootIndex(modele->index());
+    vue->setRootIndex(modele->index(this->project->getDir().absolutePath()));
 }
 
 void MainWindow::createCentralArea()

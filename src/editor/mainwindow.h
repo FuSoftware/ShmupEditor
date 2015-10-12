@@ -8,6 +8,8 @@
 #include "Widgets/ennemy_editor.h"
 #include "Widgets/qpathcanvas.h"
 
+#include"project.h"
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -24,6 +26,8 @@ private:
     std::vector<QMdiSubWindow*> window_list;
 
     QDir *projectRoot;
+
+    Project *project;
 
 };
 
