@@ -18,7 +18,7 @@ void QPathCanvas::OnInit()
     cursor_in_field = false;
     grid_divider = GRID_DIVIDER;
 
-    BG_Tex.loadFromFile(PATH_BG);
+    BG_Tex.loadFromFile(std::string(SOFTWARE_ROOT) + std::string("sprites/background.jpg"));
     BG_Sprite.setTexture(BG_Tex);
 
     parent_size.x = this->width();
