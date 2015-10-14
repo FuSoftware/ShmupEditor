@@ -10,11 +10,12 @@ Project::Project(std::string configFilePath, QObject *parent) : QObject(parent)
     this->configFile = new QFile(configFilePath.c_str());
     QFileInfo fileInfo(configFile->fileName());
 
-    if(configFile->exists ())
+    if(configFile->exists())
     {
         //The file exists
         if (!configFile->open(QIODevice::ReadOnly))
         {
+            QMessageBox::information(0,"Error","Failed to open configuration file " + configFile->fileName());
             //The file can't be read
             qDebug()<<"Failed to open configuration file "<<configFile->fileName();
         }
@@ -22,6 +23,8 @@ Project::Project(std::string configFilePath, QObject *parent) : QObject(parent)
         {
             //Continue loading
             this->rootFolder = fileInfo.absoluteDir();
+            Json::Value root = loadJSONFile(configFile->fileName().toStdString().c_str());
+            loadConfig(root);
         }
     }
 }

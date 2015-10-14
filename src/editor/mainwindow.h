@@ -8,6 +8,7 @@
 #include "Widgets/ennemy_editor.h"
 #include "Widgets/qpathcanvas.h"
 
+#include "configfile.h"
 #include"project.h"
 
 class MainWindow : public QMainWindow
@@ -26,6 +27,7 @@ public:
 
 public slots:
     void loadProject();
+    void loadProject(int);
     void addFile(int sender);
 
 signals:
@@ -40,6 +42,7 @@ private:
     QTreeView *projectView;
 
     Project *project;
+    ConfigFile *config_file;
 
 };
 

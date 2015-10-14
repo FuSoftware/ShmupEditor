@@ -3,6 +3,7 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
+    config_file = new ConfigFile(FILE_CONFIG);
     createActions();
     createDockWindows();
     createCentralArea();
@@ -10,6 +11,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
+    config_file->save();
 
 }
 
@@ -59,6 +61,19 @@ void MainWindow::createActions()
     QAction *actionLoadProject = new QAction("&Open Project", this);
     menuFichier->addAction(actionLoadProject);
 
+    QMenu *menuLoadProject = menuFichier->addMenu("Recent Projects");
+    std::vector<QAction*> actionProject;
+    for(int i=0;i<config_file->getProjectCount();i++)
+    {
+        actionProject.push_back(new QAction(config_file->getProjectName(i).c_str(),this));
+        menuLoadProject->addAction(actionProject.at(i));
+        loadProjectMapper->setMapping(actionProject.at(i),i);
+        connect( actionProject.at(i), SIGNAL(triggered()), loadProjectMapper, SLOT(map()) );
+    }
+
+    QAction *actionSaveProject = new QAction("&Save Project", this);
+    menuFichier->addAction(actionSaveProject);
+
     QMenu *menuLoadFile = menuFichier->addMenu("Add File");
     std::vector<QAction*> actions;
     for(int i=0;i<F_LIST_END;i++)
@@ -103,4 +118,9 @@ void MainWindow::addFile(int sender)
     QString path = QFileDialog::getOpenFileName(this,"Open " + QString(FileTypeString[sender].c_str()) + " File",QString(),"JSON File (*.json)");
     project->addFile(path.toStdString(),sender);
     refreshProjectTree();
+}
+
+void MainWindow::loadProject(int sender)
+{
+    loadProject(config_file->getProjectPath(sender),false);
 }
