@@ -45,7 +45,8 @@ SOURCES += main.cpp\
     Widgets/qpathcreator.cpp \
     Widgets/qcoordwidget.cpp \
     Widgets/qpathviewer.cpp \
-    project.cpp
+    project.cpp \
+    configfile.cpp
 
 HEADERS  += mainwindow.h \
     json/assertions.h \
@@ -70,7 +71,8 @@ HEADERS  += mainwindow.h \
     Widgets/qpathcreator.h \
     Widgets/qcoordwidget.h \
     Widgets/qpathviewer.h \
-    project.h
+    project.h \
+    configfile.h
 
 DISTFILES += \
     json/sconscript

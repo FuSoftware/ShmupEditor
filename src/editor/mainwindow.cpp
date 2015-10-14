@@ -13,6 +13,12 @@ MainWindow::~MainWindow()
 {
     config_file->save();
 
+    int ans = QMessageBox::question(this, "Save Project", "Do you want to save your project before exiting ?", QMessageBox::Yes | QMessageBox::No);
+
+    if (ans == QMessageBox::Yes)
+    {
+        project->save();
+    }
 }
 
 void MainWindow::createDockWindows()
@@ -54,6 +60,7 @@ void MainWindow::createCentralArea()
 void MainWindow::createActions()
 {
     QSignalMapper *loadFileMapper = new QSignalMapper( this );
+    QSignalMapper *loadProjectMapper = new QSignalMapper( this );
 
     /*File*/
     QMenu *menuFichier = menuBar()->addMenu("&File");
@@ -96,7 +103,9 @@ void MainWindow::createActions()
     connect(actionQuit,SIGNAL(triggered(bool)),qApp,SLOT(quit()));
     connect(actionLoadProject,SIGNAL(triggered(bool)),this,SLOT(loadProject()));
     connect(loadFileMapper,SIGNAL(mapped(int)),this,SLOT(addFile(int)));
+    connect(loadProjectMapper,SIGNAL(mapped(int)),this,SLOT(loadProject(int)));
     connect(this,SIGNAL(projectLoaded(bool)),menuLoadFile,SLOT(setEnabled(bool)));
+    connect(actionSaveProject,SIGNAL(triggered(bool)),this,SLOT(saveProject()));
 }
 
 void MainWindow::refreshProjectTree()
@@ -108,14 +117,40 @@ void MainWindow::refreshProjectTree()
 void MainWindow::loadProject()
 {
     QString path = QFileDialog::getOpenFileName(this,"Open Project File",QString(),"ShmuProject File (*.shp)");
-    project = new Project(path.toStdString(),this);
+    loadProject(path.toStdString());
+}
+
+void MainWindow::loadProject(std::string path, bool addToRecent)
+{
+    QFileInfo fileInfo(QFile(path.c_str()));
+    if(addToRecent){config_file->addProject(fileInfo.fileName().toStdString(),path);}
+
+    project = new Project(path,this);
     refreshProjectTree();
     emit projectLoaded(true);
 }
 
+void MainWindow::saveProject()
+{
+    project->save();
+}
+
 void MainWindow::addFile(int sender)
 {
-    QString path = QFileDialog::getOpenFileName(this,"Open " + QString(FileTypeString[sender].c_str()) + " File",QString(),"JSON File (*.json)");
+    QString path;
+
+    switch(sender)
+    {
+    case F_SPRITE:
+        path = QFileDialog::getOpenFileName(this,"Open " + QString(FileTypeString[sender].c_str()) + " File",QString(),"Pictures (*.png *.jpg *.jpeg)");
+        break;
+    case F_MUSIC:
+        path = QFileDialog::getOpenFileName(this,"Open " + QString(FileTypeString[sender].c_str()) + " File",QString(),"Music (*.mp3 *.ogg)");
+        break;
+    default:
+        path = QFileDialog::getOpenFileName(this,"Open " + QString(FileTypeString[sender].c_str()) + " File",QString(),"JSON File (*.json)");
+        break;
+    }
     project->addFile(path.toStdString(),sender);
     refreshProjectTree();
 }

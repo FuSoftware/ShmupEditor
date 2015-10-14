@@ -9,6 +9,7 @@
 #include "Widgets/qpathcanvas.h"
 
 #include "configfile.h"
+
 #include"project.h"
 
 class MainWindow : public QMainWindow
@@ -24,10 +25,13 @@ public:
     void createActions();
     void refreshProjectTree();
 
+    void loadProject(std::string path, bool addToRecent = true);
+
 
 public slots:
     void loadProject();
     void loadProject(int);
+    void saveProject();
     void addFile(int sender);
 
 signals:
