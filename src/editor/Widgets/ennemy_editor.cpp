@@ -5,6 +5,23 @@ EnnemyEditor::EnnemyEditor(QWidget *parent) : QWidget(parent)
     sprite_loaded = false;
     path_loaded = false;
 
+    loadUI();
+
+}
+
+EnnemyEditor::EnnemyEditor(QString file, QWidget *parent) : QWidget(parent)
+{
+    loadUI();
+    loadFile(file.toStdString());
+}
+
+EnnemyEditor::~EnnemyEditor()
+{
+
+}
+
+void EnnemyEditor::loadUI()
+{
     layoutMain = new QHBoxLayout;
     layoutParam = new QVBoxLayout;
 
@@ -77,19 +94,35 @@ EnnemyEditor::EnnemyEditor(QWidget *parent) : QWidget(parent)
     connect(pushButtonSave,SIGNAL(clicked()),this,SLOT(save()));
 
     resize(0,0);
-
 }
 
-EnnemyEditor::~EnnemyEditor()
+void EnnemyEditor::loadFile(std::string file)
 {
+    Json::Value root = loadJSONFile(file.c_str());
 
+    /*Sprite*/
+    loadSprite(QString(root["sprite"].asCString()));
+
+    /*Path*/
+    loadPath(root["path"]);
+
+    /*Other data*/
+    lineEditName->setText(root["name"].asCString());
+    lineEditHealth->setText(QString::number(root["health"].asInt()));
+    lineEditSize[0]->setText(QString::number(root["size"]["w"].asInt()));
+    lineEditSize[1]->setText(QString::number(root["size"]["h"].asInt()));
+    lineEditSpawnTime->setText(QString::number(root["spawn_time"].asInt()));
 }
 
 void EnnemyEditor::loadSprite()
 {
     /*Loads a Sprite's file path*/
     QString file = QFileDialog::getOpenFileName(this, "Open File", QString(), "Pictures (*.png *.jpg *.jpeg)");
+    loadSprite(file);
+}
 
+void EnnemyEditor::loadSprite(QString file)
+{
     QPixmap pixmap(file);//Loads the sprite's pixmap
 
     if(!pixmap.isNull())
@@ -109,13 +142,20 @@ void EnnemyEditor::loadSprite()
 
 void EnnemyEditor::loadPath()
 {
-    positions.clear();
-
     /*Loads a Path's file path*/
     QString file = QFileDialog::getOpenFileName(this, "Open File", QString(), "JSON File (*.json)");
+    loadPath(file);
+}
 
+void EnnemyEditor::loadPath(QString file)
+{
     Json::Value root = loadJSONFile(file.toStdString().c_str());
+    loadPath(root);
+}
 
+void EnnemyEditor::loadPath(Json::Value root)
+{
+    positions.clear();
     sf::Vector2<float> vector;
     sf::Vector2<float> parent_size;
     parent_size.x = 128;
@@ -137,8 +177,8 @@ void EnnemyEditor::loadPath()
         path = root;
         pathViewer->setPath(positions);
 
-        labelPathFilePath->setText(file);//Shows the path on the widget
         path_loaded = true;
+        labelPathFilePath->setText("OK");
     }
     else
     {

@@ -15,7 +15,14 @@ class EnnemyEditor : public QWidget
     Q_OBJECT
 public:
     EnnemyEditor(QWidget *parent = 0);
+    EnnemyEditor(QString file, QWidget *parent = 0);
     ~EnnemyEditor();
+
+    void loadUI();
+    void loadFile(std::string file);
+    void loadSprite(QString file);
+    void loadPath(QString file);
+    void loadPath(Json::Value root);
 
 signals:
 
