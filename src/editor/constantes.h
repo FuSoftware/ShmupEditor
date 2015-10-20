@@ -20,6 +20,15 @@
     #define FILE_CONFIG "config/config.json"
 #endif
 
+/*Extensions*/
+#define EX_PROJECT "shp"
+#define EX_ENNEMY "ennemy"
+#define EX_BULLET "bullet"
+#define EX_PATH "path"
+#define EX_PATTERN "pattern"
+#define EX_LEVEL "level"
+#define EX_JSON "json"
+
 enum OutputLevel{
     LEVEL_VERBOSE=0,
     LEVEL_TOP_WIDGET
