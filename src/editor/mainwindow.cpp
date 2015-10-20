@@ -32,6 +32,8 @@ void MainWindow::createDockWindows()
     projectView = new QTreeView;
     projectView->setModel(projectModel);
 
+    connect(projectView,SIGNAL(doubleClicked(QModelIndex)),this,SLOT(loadTreeFile(QModelIndex)));
+
     dock->setWidget(projectView);
 
     addDockWidget(Qt::LeftDockWidgetArea, dock);
@@ -40,19 +42,14 @@ void MainWindow::createDockWindows()
 void MainWindow::createCentralArea()
 {
     /*Main Widget*/
-    QMdiArea *centralArea = new QMdiArea;
+    centralArea = new QMdiArea;
 
-    EnnemyEditor *ennemyEdit = new EnnemyEditor(this);
+    EnnemyEditor *ennemyEdit = new EnnemyEditor(QString("F:/GitHub/SchmupEditor/data/project_example/ennemies/7up.ennemy"),this);
 
-    //QFrame* MainFrame = new QFrame;
-    //MainFrame->setWindowTitle("Qt SFML");
-    //MainFrame->resize(400, 400);
-    //MainFrame->show();
-
-    QPathCanvas *pathCreator = new QPathCanvas(this,QPoint(20,20),QSize(480,640));
+    //QPathCanvas *pathCreator = new QPathCanvas(this,QPoint(20,20),QSize(480,640));
 
     QMdiSubWindow *subWindowEnnemyEdit = centralArea->addSubWindow(ennemyEdit);
-    QMdiSubWindow *subWindowPathCreator = centralArea->addSubWindow(pathCreator);
+    //QMdiSubWindow *subWindowPathCreator = centralArea->addSubWindow(pathCreator);
 
     setCentralWidget(centralArea);
 }
@@ -158,4 +155,62 @@ void MainWindow::addFile(int sender)
 void MainWindow::loadProject(int sender)
 {
     loadProject(config_file->getProjectPath(sender),false);
+}
+
+void MainWindow::loadTreeFile(QModelIndex index)
+{
+    QString file = this->projectModel->filePath(index);
+    qDebug() << "Tree Index Loading " << file;
+    loadTreeFile(file);
+
+}
+
+void MainWindow::loadTreeFile(QString file)
+{
+    /*
+    #define EX_PROJECT "shp"
+    #define EX_ENNEMY "ennemy"
+    #define EX_BULLET "bullet"
+    #define EX_PATH "path"
+    #define EX_PATTERN "pattern"
+    #define EX_LEVEL "level"
+    #define EX_JSON "json"
+    */
+
+    QFileInfo fileInfo(file);
+
+    qDebug() << "Tree File Loading " << fileInfo.absoluteFilePath();
+    qDebug() << "Extension :  " << fileInfo.completeSuffix();
+    qDebug() << "Ennemy ext " << QString(EX_ENNEMY);
+
+
+    if(fileInfo.completeSuffix().compare(QString(EX_ENNEMY)))
+    {
+        /*Ennemy*/
+        EnnemyEditor *ennemyEdit = new EnnemyEditor(fileInfo.absoluteFilePath(),this);
+        QMdiSubWindow *subWindowEnnemyEdit = centralArea->addSubWindow(ennemyEdit);
+    }
+    else if(fileInfo.completeSuffix().compare(EX_BULLET))
+    {
+        /*Path*/
+    }
+    else if(fileInfo.completeSuffix().compare(EX_PATH))
+    {
+        /*Bullet*/
+    }
+    else if(fileInfo.completeSuffix().compare(EX_PATTERN))
+    {
+        /*Pattern*/
+    }
+    else if(fileInfo.completeSuffix().compare(EX_LEVEL))
+    {
+        /*Level*/
+    }
+    else if(fileInfo.completeSuffix().compare(EX_JSON))
+    {
+        /*JSON*/
+
+    }
+
+
 }

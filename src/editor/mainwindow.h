@@ -27,17 +27,22 @@ public:
 
     void loadProject(std::string path, bool addToRecent = true);
 
+    void loadTreeFile(QString file);
+
 
 public slots:
     void loadProject();
     void loadProject(int);
     void saveProject();
     void addFile(int sender);
+    void loadTreeFile(QModelIndex index);
 
 signals:
     void projectLoaded(bool);
 
 private:
+    QMdiArea *centralArea;
+
     std::vector<QMdiSubWindow*> window_list;
 
     QDir *projectRoot;
