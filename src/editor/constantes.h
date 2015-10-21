@@ -11,9 +11,17 @@
 #define VERSION_REV 1 //Code revision wo bugfix
 
 #if DEBUG
+    #ifdef _WIN32
     #define SOFTWARE_ROOT "F:/GitHub/SchmupEditor/data/"
     #define FOLDER_CONFIG "F:/GitHub/SchmupEditor/data/config/"
     #define FILE_CONFIG "F:/GitHub/SchmupEditor/data/config/config.json"
+#define FILE_ENNEMY_TEST "F:/GitHub/SchmupEditor/data/project_example/ennemies/7up.ennemy"
+    #elif __linux
+#define SOFTWARE_ROOT "/home/florent/Git/SchmupEditor.git/data/"
+#define FOLDER_CONFIG "/home/florent/Git/SchmupEditor.git/data/config/"
+#define FILE_CONFIG "/home/florent/Git/SchmupEditor.git/data/config/config.json"
+#define FILE_ENNEMY_TEST "/home/florent/Git/SchmupEditor.git/data/project_example/ennemies/7up.ennemy"
+    #endif
 #else
     #define SOFTWARE_ROOT "./"
     #define FOLDER_CONFIG "config/"
