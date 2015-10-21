@@ -4,6 +4,7 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
     config_file = new ConfigFile(FILE_CONFIG);
+
     createActions();
     createDockWindows();
     createCentralArea();
@@ -44,11 +45,10 @@ void MainWindow::createCentralArea()
     /*Main Widget*/
     centralArea = new QMdiArea;
 
-    EnnemyEditor *ennemyEdit = new EnnemyEditor(QString("F:/GitHub/SchmupEditor/data/project_example/ennemies/7up.ennemy"),this);
+    //EnnemyEditor *ennemyEdit = new EnnemyEditor(QString(FILE_ENNEMY_TEST),this);
+    //QMdiSubWindow *subWindowEnnemyEdit = centralArea->addSubWindow(ennemyEdit);
 
     //QPathCanvas *pathCreator = new QPathCanvas(this,QPoint(20,20),QSize(480,640));
-
-    QMdiSubWindow *subWindowEnnemyEdit = centralArea->addSubWindow(ennemyEdit);
     //QMdiSubWindow *subWindowPathCreator = centralArea->addSubWindow(pathCreator);
 
     setCentralWidget(centralArea);
@@ -179,16 +179,13 @@ void MainWindow::loadTreeFile(QString file)
 
     QFileInfo fileInfo(file);
 
-    qDebug() << "Tree File Loading " << fileInfo.absoluteFilePath();
-    qDebug() << "Extension :  " << fileInfo.completeSuffix();
-    qDebug() << "Ennemy ext " << QString(EX_ENNEMY);
-
-
-    if(fileInfo.completeSuffix().compare(QString(EX_ENNEMY)))
+    if(fileInfo.completeSuffix().compare(QString(EX_ENNEMY)) == 0)
     {
         /*Ennemy*/
+        qDebug() << "Loading new ennemy" << fileInfo.absoluteFilePath() ;
         EnnemyEditor *ennemyEdit = new EnnemyEditor(fileInfo.absoluteFilePath(),this);
         QMdiSubWindow *subWindowEnnemyEdit = centralArea->addSubWindow(ennemyEdit);
+        subWindowEnnemyEdit->show();
     }
     else if(fileInfo.completeSuffix().compare(EX_BULLET))
     {
