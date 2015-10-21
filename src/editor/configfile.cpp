@@ -8,6 +8,9 @@ ConfigFile::ConfigFile()
 ConfigFile::ConfigFile(std::string path)
 {
     this->path = path;
+
+    std::cout << "Loading file at " << path << std::endl;
+
     root = loadJSONFile(path.c_str());
 
     if(root.empty())
@@ -89,6 +92,8 @@ void ConfigFile::loadProjects()
     //Loads the projects (10 max)
     int limit;
     if(root["recent_projects"].size()>PROJECT_LIMIT){limit = PROJECT_LIMIT;}else{limit = root["recent_projects"].size();}
+
+    std::cout <<"Loading " << limit << " entries"<<std::endl;
 
     for(int i=0;i<limit;i++)
     {

@@ -247,7 +247,7 @@ void EnnemyEditor::save()
     {
         /*Saves*/
         QString folder_path = QFileInfo(labelFilePath->text()).absoluteDir().absolutePath();
-        QString file_path = QFileDialog::getSaveFileName(this, "Save File", folder_path + "/" + lineEditName->text() + ".json", "Json File (*.json)");
+        QString file_path = QFileDialog::getSaveFileName(this, "Save File", folder_path + "/" + lineEditName->text() + ".ennemy", "Json Ennemy File (*.ennemy)");
 
         Json::Value root;
 
