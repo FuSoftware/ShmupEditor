@@ -1,0 +1,38 @@
+{
+   "health" : 150,
+   "name" : "7up",
+   "path" : [
+      {
+         "t" : 0,
+         "x" : 0,
+         "y" : 0
+      },
+      {
+         "t" : 2000,
+         "x" : 0,
+         "y" : 0
+      },
+      {
+         "t" : 35000,
+         "x" : 0,
+         "y" : 0
+      },
+      {
+         "t" : 4000,
+         "x" : 0,
+         "y" : 0
+      },
+      {
+         "t" : 6000,
+         "x" : 0,
+         "y" : 0
+      },
+      null
+   ],
+   "size" : {
+      "h" : 128,
+      "w" : 128
+   },
+   "spawn_time" : 2000,
+   "sprite" : "/home/florent/Git/SchmupEditor.git/data/project_example/sprites/7up.png"
+}
