@@ -2,6 +2,10 @@
    "recent_projects" : [
       [
          "TestProject.shp",
+         "F:/GitHub/SchmupEditor/data/project_example/TestProject.shp"
+      ],
+      [
+         "TestProject.shp",
          "/home/florent/Git/SchmupEditor.git/data/project_example/TestProject.shp"
       ]
    ],
