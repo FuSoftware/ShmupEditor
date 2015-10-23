@@ -2,6 +2,19 @@
 
 QPathCreator::QPathCreator(QWidget *parent) : QWidget(parent)
 {
+    loadUI();
+}
+
+QPathCreator::QPathCreator(QString file, QWidget *parent) : QWidget(parent)
+{
+    loadUI();
+    load(file);
+    path = file;
+}
+
+
+void QPathCreator::loadUI()
+{
     QVBoxLayout *layoutMain = new QVBoxLayout;
     QHBoxLayout *layoutPath = new QHBoxLayout;
     QHBoxLayout *layoutFooter = new QHBoxLayout;
@@ -30,13 +43,19 @@ QPathCreator::QPathCreator(QWidget *parent) : QWidget(parent)
     sliderTime = new QSlider(this);
     sliderTime->setOrientation(Qt::Horizontal);
 
+    QPushButton *pushButtonSaveAs = new QPushButton("Save as",this);
+    QHBoxLayout *layout = new QHBoxLayout;
+
+    layout->addWidget(pushButtonSave);
+    layout->addWidget(pushButtonSaveAs);
+
     widgetArea->setLayout(layoutCoordinatesB);
 
     layoutPath->addWidget(pathCanvas);
     layoutPath->addWidget(scrollCoord);
 
     layoutFooter->addWidget(sliderTime);
-    layoutFooter->addWidget(pushButtonSave);
+    layoutFooter->addLayout(layout);
 
     layoutMain->addLayout(layoutPath);
     layoutMain->addLayout(layoutFooter);
@@ -57,6 +76,7 @@ QPathCreator::QPathCreator(QWidget *parent) : QWidget(parent)
     connect(pathCanvas,SIGNAL(coordEdited(int,TimedVector*)),this,SLOT(editCoordWidget(int,TimedVector*)));
 
     connect(pushButtonSave,SIGNAL(clicked()),this,SLOT(save()));
+    connect(pushButtonSaveAs,SIGNAL(clicked()),this,SLOT(saveAs()));
 }
 
 void QPathCreator::addCoordWidget(TimedVector *coordinates)
@@ -83,13 +103,48 @@ void QPathCreator::editCoordWidget(int index, TimedVector *coordinates)
     coordinateWidgets.at(index)->changeData(index, coordinates);
 }
 
+void QPathCreator::load(QString file)
+{
+    Json::Value root = loadJSONFile(file.toStdString().c_str());
+    load(root);
+}
+
+void QPathCreator::load(Json::Value root)
+{
+    TimedVector *coordinates = new TimedVector();
+    sf::Vector2<float> vec;
+
+    for(int i=0;i<root.size();i++)
+    {
+        vec.x = root[i]["x"].asFloat();
+        vec.y = root[i]["y"].asFloat();
+
+        coordinates->setVector(vec,V_REL);
+        coordinates->setTime(root[i]["t"].asInt());
+        addCoordWidget(coordinates);
+    }
+}
+
 void QPathCreator::save()
+{
+    saveFile(false);
+}
+
+void QPathCreator::saveAs()
+{
+    saveFile(true);
+}
+
+void QPathCreator::saveFile(bool newFile)
 {
     /*Saves the paths as a .json file*/
     std::vector< TimedVector* > coordinates = pathCanvas->getCoordinates();
     Json::Value root;
 
-    QString file = QFileDialog::getSaveFileName(this, "Enregistrer un fichier", QString(), "JSON File (*.json)");
+    if(path.isEmpty() || newFile)
+    {
+        path = QFileDialog::getSaveFileName(this, "Enregistrer un fichier", QString(), "JSON File (*.json)");
+    }
 
     for(int i=0;i<coordinates.size();i++)
     {
@@ -99,5 +154,5 @@ void QPathCreator::save()
         root[i]["t"] = coordinates.at(i)->getTime();
     }
 
-    saveJSONFile(root,file.toStdString().c_str());
+    saveJSONFile(root,path.toStdString().c_str());
 }

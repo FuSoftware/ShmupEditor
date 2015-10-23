@@ -13,6 +13,12 @@ class QPathCreator : public QWidget
     Q_OBJECT
 public:
     QPathCreator(QWidget *parent = 0);
+    QPathCreator(QString file, QWidget *parent = 0);
+    void loadUI();
+
+    void load(QString file);
+    void load(Json::Value root);
+    void saveFile(bool newFile);
 
 signals:
 
@@ -22,9 +28,12 @@ public slots:
     void editCoordWidget(int index, TimedVector *coordinates);
 
     void save();
+    void saveAs();
 
 
 private:
+    QString path;
+
     QPathCanvas* pathCanvas;
     QVBoxLayout* layoutCoordinates;
     std::vector<QCoordWidget*> coordinateWidgets;
