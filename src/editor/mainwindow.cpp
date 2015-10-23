@@ -1,7 +1,6 @@
 #include "mainwindow.h"
 
-MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent)
+MainWindow::MainWindow(QWidget *parent): QMainWindow(parent)
 {
     config_file = new ConfigFile(FILE_CONFIG);
 
@@ -57,6 +56,7 @@ void MainWindow::createCentralArea()
 void MainWindow::createActions()
 {
     QSignalMapper *loadFileMapper = new QSignalMapper( this );
+    QSignalMapper *newFileMapper = new QSignalMapper( this );
     QSignalMapper *loadProjectMapper = new QSignalMapper( this );
 
     /*File*/
@@ -65,6 +65,7 @@ void MainWindow::createActions()
     QAction *actionLoadProject = new QAction("&Open Project", this);
     menuFichier->addAction(actionLoadProject);
 
+    /*Recent Projects*/
     QMenu *menuLoadProject = menuFichier->addMenu("Recent Projects");
     std::vector<QAction*> actionProject;
     for(int i=0;i<config_file->getProjectCount();i++)
@@ -78,6 +79,18 @@ void MainWindow::createActions()
     QAction *actionSaveProject = new QAction("&Save Project", this);
     menuFichier->addAction(actionSaveProject);
 
+    /*New File*/
+    QMenu *menuNewFile = menuFichier->addMenu("New File");
+    std::vector<QAction*> actionsNewFile;
+    for(int i=0;i<F_LIST_END;i++)
+    {
+        actionsNewFile.push_back(new QAction(FileTypeString[i].c_str(),this));
+        menuNewFile->addAction(actionsNewFile.at(i));
+        newFileMapper->setMapping(actionsNewFile.at(i),i);
+        connect( actionsNewFile.at(i), SIGNAL(triggered()), newFileMapper, SLOT(map()) );
+    }
+
+    /* Add file*/
     QMenu *menuLoadFile = menuFichier->addMenu("Add File");
     std::vector<QAction*> actions;
     for(int i=0;i<F_LIST_END;i++)
@@ -100,6 +113,7 @@ void MainWindow::createActions()
     connect(actionQuit,SIGNAL(triggered(bool)),qApp,SLOT(quit()));
     connect(actionLoadProject,SIGNAL(triggered(bool)),this,SLOT(loadProject()));
     connect(loadFileMapper,SIGNAL(mapped(int)),this,SLOT(addFile(int)));
+    connect(newFileMapper,SIGNAL(mapped(int)),this,SLOT(newFile(int)));
     connect(loadProjectMapper,SIGNAL(mapped(int)),this,SLOT(loadProject(int)));
     connect(this,SIGNAL(projectLoaded(bool)),menuLoadFile,SLOT(setEnabled(bool)));
     connect(actionSaveProject,SIGNAL(triggered(bool)),this,SLOT(saveProject()));
@@ -132,6 +146,35 @@ void MainWindow::saveProject()
     project->save();
 }
 
+void MainWindow::newFile(int sender)
+{
+    QMdiSubWindow *window;
+    BulletEditor *bulletEdit;
+    EnnemyEditor *ennemyEdit;
+    QPathCreator *pathCreator;
+
+    switch(sender)
+    {
+    case F_BULLET:
+        bulletEdit = new BulletEditor(this);
+        window = centralArea->addSubWindow(bulletEdit);
+        window->show();
+        break;
+    case F_ENNEMY:
+        ennemyEdit = new EnnemyEditor(this);
+        window = centralArea->addSubWindow(ennemyEdit);
+        window->show();
+        break;
+    case F_PATH:
+        pathCreator = new QPathCreator(this);
+        window = centralArea->addSubWindow(pathCreator);
+        window->show();
+        break;
+    default:
+        break;
+    }
+}
+
 void MainWindow::addFile(int sender)
 {
     QString path;
@@ -160,7 +203,7 @@ void MainWindow::loadProject(int sender)
 void MainWindow::loadTreeFile(QModelIndex index)
 {
     QString file = this->projectModel->filePath(index);
-    qDebug() << "Tree Index Loading " << file;
+    qDebug() << "Tree Index Loading " << file << "| Ext :" << QFileInfo(file).completeSuffix();
     loadTreeFile(file);
 
 }
@@ -182,18 +225,26 @@ void MainWindow::loadTreeFile(QString file)
     if(fileInfo.completeSuffix().compare(QString(EX_ENNEMY)) == 0)
     {
         /*Ennemy*/
-        qDebug() << "Loading new ennemy" << fileInfo.absoluteFilePath() ;
+        qDebug() << "Loading ennemy" << fileInfo.absoluteFilePath() ;
         EnnemyEditor *ennemyEdit = new EnnemyEditor(fileInfo.absoluteFilePath(),this);
         QMdiSubWindow *subWindowEnnemyEdit = centralArea->addSubWindow(ennemyEdit);
         subWindowEnnemyEdit->show();
     }
-    else if(fileInfo.completeSuffix().compare(EX_BULLET))
+    else if(fileInfo.completeSuffix().compare(QString(EX_PATH)) == 0)
     {
         /*Path*/
+        qDebug() << "Loading path" << fileInfo.absoluteFilePath() ;
+        QPathCreator *Path = new QPathCreator(fileInfo.absoluteFilePath(),this);
+        QMdiSubWindow *subWindowPath = centralArea->addSubWindow(Path);
+        subWindowPath->show();
     }
-    else if(fileInfo.completeSuffix().compare(EX_PATH))
+    else if(fileInfo.completeSuffix().compare(QString(EX_BULLET)) == 0)
     {
         /*Bullet*/
+        qDebug() << "Loading bullet" << fileInfo.absoluteFilePath() ;
+        BulletEditor *bulletEdit = new BulletEditor(fileInfo.absoluteFilePath(),this);
+        QMdiSubWindow *subWindowBulletEdit = centralArea->addSubWindow(bulletEdit);
+        subWindowBulletEdit->show();
     }
     else if(fileInfo.completeSuffix().compare(EX_PATTERN))
     {
@@ -207,6 +258,10 @@ void MainWindow::loadTreeFile(QString file)
     {
         /*JSON*/
 
+    }
+    else
+    {
+        qDebug() << "Unrecognized format :" << fileInfo.completeSuffix() ;
     }
 
 

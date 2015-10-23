@@ -6,7 +6,8 @@
 #include <QtWidgets>
 
 #include "Widgets/ennemy_editor.h"
-#include "Widgets/qpathcanvas.h"
+#include "Widgets/qpathcreator.h"
+#include "Widgets/bullet_editor.h"
 
 #include "configfile.h"
 
@@ -34,6 +35,7 @@ public slots:
     void loadProject();
     void loadProject(int);
     void saveProject();
+    void newFile(int sender);
     void addFile(int sender);
     void loadTreeFile(QModelIndex index);
 
