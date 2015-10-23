@@ -10,7 +10,8 @@
 
 enum FileType
 {
-    F_ENNEMY = 0,
+    F_BULLET = 0,
+    F_ENNEMY,
     F_LEVEL,
     F_MUSIC,
     F_PATH,
@@ -19,7 +20,7 @@ enum FileType
     F_SPRITE,
     F_LIST_END
 };
-const std::string FileTypeString[F_LIST_END] = {"Ennemy","Level","Music","Path","Pattern","Player","Sprite"};
+const std::string FileTypeString[F_LIST_END] = {"Bullet","Ennemy","Level","Music","Path","Pattern","Player","Sprite"};
 
 class Project : public QObject
 {
