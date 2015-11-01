@@ -1,21 +1,18 @@
 #include "mainwindow.h"
-#include "Widgets/qpathcreator.h"
-#include "Widgets/ennemy_editor.h"
 #include <QApplication>
 #include <iostream>
+
+#include "Widgets/pattern_editor.h"
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
-    MainWindow w;
-    w.show();
+    //MainWindow w;
+    //w.show();
 
-    //EnnemyEditor e;
-    //e.show();
-
-    //QPathCreator *pathCreator = new QPathCreator(0);
-    //pathCreator->show();
+    PatternEditor e;
+    e.show();
 
     return a.exec();
 }
