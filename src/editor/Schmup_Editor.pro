@@ -47,7 +47,10 @@ SOURCES += main.cpp\
     Widgets/qpathviewer.cpp \
     project.cpp \
     configfile.cpp \
-    Widgets/bullet_editor.cpp
+    Widgets/bullet_editor.cpp \
+    Widgets/pattern_editor.cpp \
+    Widgets/qpatternviewer.cpp \
+    Objects/patternbullet.cpp
 
 HEADERS  += mainwindow.h \
     json/assertions.h \
@@ -74,7 +77,10 @@ HEADERS  += mainwindow.h \
     Widgets/qpathviewer.h \
     project.h \
     configfile.h \
-    Widgets/bullet_editor.h
+    Widgets/bullet_editor.h \
+    Widgets/pattern_editor.h \
+    Widgets/qpatternviewer.h \
+    Objects/patternbullet.h
 
 DISTFILES += \
     json/sconscript
